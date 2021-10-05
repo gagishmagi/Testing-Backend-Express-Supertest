@@ -1,8 +1,13 @@
 const Post = require('../models/Post');
 
 exports.getAll = async function (req, res, next) {
-    const posts = await Post.find();
-    res.send(posts)
+    try {
+        const posts = await Post.find();
+        res.status(200).send(posts)
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+
 }
 
 exports.findOne = async function (req, res) {
@@ -25,6 +30,7 @@ exports.create = async function (req, res) {
         content: req.body.content,
     });
     await post.save();
+    post.id = post._id;
     res.send(post);
 }
 
